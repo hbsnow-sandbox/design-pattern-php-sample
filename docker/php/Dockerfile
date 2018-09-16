@@ -1,6 +1,10 @@
 FROM php:7-fpm
 
-RUN apt-get update \
-  && docker-php-ext-install pdo_mysql mysqli mbstring
+COPY php.ini /usr/local/etc/php/
 
-ADD ./php.ini /etc/php.ini
+RUN apt-get update && apt-get install -y \
+  libfreetype6-dev libjpeg62-turbo-dev libpng-dev git vim unzip \
+  && docker-php-ext-install pdo_mysql mysqli mbstring gd iconv
+
+# install composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
